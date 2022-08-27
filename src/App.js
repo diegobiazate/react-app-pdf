@@ -1,23 +1,38 @@
+import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+import { Impressao } from './impressao';
+
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import { data } from './data';
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+
+
 function App() {
+
+  const visualizarImpressao = async () => {
+    console.log('report', data);
+    const classeImpressao = new Impressao(data);
+    const documento = await classeImpressao.PreparaDocumento();
+    pdfMake.createPdf(documento).open({}, window.open('', '_blank'));
+  }
+
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+          Criando documentos PDF com ReactJS
+        </p>        
       </header>
+      <section className="App-body">
+        <button className="btn" onClick={visualizarImpressao}>
+          Visualizar documento
+        </button>
+      </section>
     </div>
   );
 }
